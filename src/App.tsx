@@ -4,6 +4,7 @@ import { DashboardStats } from './components/DashboardStats';
 import { PokemonDetailsModal } from './components/PokemonDetailsModal';
 import { SavedTeams } from './components/SavedTeams';
 import { SearchBar } from './components/SearchBar';
+import { SharedLinkNotice, TeamShare } from './components/TeamShare';
 import { TeamSlots } from './components/TeamSlots';
 import { TeamStatsPanel } from './components/TeamStatsPanel';
 import { TypeSuggestions } from './components/TypeSuggestions';
@@ -14,6 +15,7 @@ import { analyzeTeam } from './domain/weakness';
 import { usePokemonNames } from './hooks/usePokemonNames';
 import { useSavedTeams } from './hooks/useSavedTeams';
 import { useTeam } from './hooks/useTeam';
+import { useTeamImport } from './hooks/useTeamImport';
 import { useTypeRelations } from './hooks/useTypeRelations';
 
 export function App() {
@@ -21,6 +23,7 @@ export function App() {
   const savedTeams = useSavedTeams();
   const { names, retry: retryNames } = usePokemonNames();
   const [detailsOf, setDetailsOf] = useState<Pokemon | null>(null);
+  const teamImport = useTeamImport(slots, load);
 
   const team = useMemo(() => slots.filter((slot): slot is Pokemon => slot !== null), [slots]);
   const teamTypes = useMemo(() => [...new Set(team.flatMap((pokemon) => pokemon.types))], [team]);
@@ -63,6 +66,8 @@ export function App() {
         />
       </header>
 
+      <SharedLinkNotice controls={teamImport} />
+
       <main className="dashboard">
         {/* As duas colunas só existem no desktop; abaixo disso os cards fluem direto no grid. */}
         <div className="dashboard-main">
@@ -104,6 +109,9 @@ export function App() {
               }}
               onDelete={savedTeams.remove}
             />
+          </div>
+          <div className="card area-share">
+            <TeamShare slots={slots} controls={teamImport} />
           </div>
           <div className="card area-suggestions">
             <TypeSuggestions team={team} teamSize={slots.length} />
