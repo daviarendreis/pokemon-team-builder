@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { formatName, type Pokemon } from '../domain/pokemon';
 import { analyzeTeam, type RelationsByType, type TypeThreat } from '../domain/weakness';
 import type { RelationsStatus } from '../hooks/useTypeRelations';
@@ -65,6 +65,10 @@ function ThreatRow({ threat, teamSize }: { threat: TypeThreat; teamSize: number 
 
 function Analysis({ team, relations }: Pick<WeaknessPanelProps, 'team' | 'relations'>) {
   const { threats, teamWideWeaknesses } = useMemo(() => analyzeTeam(team, relations), [team, relations]);
+  const [showSafe, setShowSafe] = useState(false);
+  const threatening = threats.filter((threat) => threat.weak.length > 0);
+  const safe = threats.filter((threat) => threat.weak.length === 0);
+  const visible = showSafe ? [...threatening, ...safe] : threatening;
 
   return (
     <>
@@ -100,11 +104,23 @@ function Analysis({ team, relations }: Pick<WeaknessPanelProps, 'team' | 'relati
             </tr>
           </thead>
           <tbody>
-            {threats.map((threat) => (
+            {visible.map((threat) => (
               <ThreatRow key={threat.type} threat={threat} teamSize={team.length} />
             ))}
           </tbody>
         </table>
+        {safe.length > 0 && (
+          <button
+            type="button"
+            className="threats-toggle"
+            aria-expanded={showSafe}
+            onClick={() => setShowSafe((value) => !value)}
+          >
+            {showSafe
+              ? `Ocultar ${safe.length} ${safe.length === 1 ? 'tipo' : 'tipos'} sem fraquezas`
+              : `Mostrar ${safe.length} ${safe.length === 1 ? 'tipo' : 'tipos'} sem fraquezas (0/${team.length})`}
+          </button>
+        )}
       </div>
       <p className="footnote">
         Considera apenas os tipos atuais de cada Pokémon. Habilidades como Levitate não entram no
