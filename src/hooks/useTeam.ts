@@ -23,7 +23,8 @@ type TeamAction =
   | { type: 'search-started'; query: string }
   | { type: 'search-succeeded'; query: string; pokemon: Pokemon }
   | { type: 'search-failed'; query: string; failure: SearchFailure }
-  | { type: 'removed'; index: number };
+  | { type: 'removed'; index: number }
+  | { type: 'loaded'; slots: Slot[] };
 
 const initialState: TeamState = {
   slots: Array.from({ length: TEAM_SIZE }, () => null),
@@ -64,6 +65,13 @@ export function teamReducer(state: TeamState, action: TeamAction): TeamState {
         slots: state.slots.with(action.index, null),
         search: state.search.status === 'loading' ? state.search : { status: 'idle' },
       };
+
+    case 'loaded':
+      // Substitui o time inteiro, mantendo sempre TEAM_SIZE posições.
+      return {
+        slots: Array.from({ length: TEAM_SIZE }, (_, i) => action.slots[i] ?? null),
+        search: { status: 'idle' },
+      };
   }
 }
 
@@ -102,5 +110,11 @@ export function useTeam() {
 
   const remove = useCallback((index: number) => dispatch({ type: 'removed', index }), []);
 
-  return { slots: state.slots, search: state.search, runSearch, remove };
+  /** Troca o time atual por outro (ex.: um time salvo). Cancela a busca em andamento. */
+  const load = useCallback((slots: Slot[]) => {
+    inFlight.current?.abort();
+    dispatch({ type: 'loaded', slots });
+  }, []);
+
+  return { slots: state.slots, search: state.search, runSearch, remove, load };
 }

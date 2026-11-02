@@ -56,6 +56,14 @@ describe('teamReducer', () => {
     expect(state.search).toMatchObject({ status: 'error', failure: 'team-full' });
   });
 
+  it('carregar um time salvo substitui todos os slots e limpa a busca', () => {
+    const before = teamReducer(teamOf(1, 2), added(3));
+    const state = teamReducer(before, { type: 'loaded', slots: [null, pokemon(9)] });
+
+    expect(state.slots.map((slot) => slot?.id ?? null)).toEqual([null, 9, null, null, null, null]);
+    expect(state.search).toEqual({ status: 'idle' });
+  });
+
   it('registra a falha mantendo o texto buscado para tentar de novo', () => {
     const state = teamReducer(teamOf(), {
       type: 'search-failed',

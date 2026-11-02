@@ -12,6 +12,15 @@
   --warning: #8a5a00;
   --success: #2c6e3f;
   --radius: 14px;
+  --shadow-card: 0 1px 2px rgb(35 32 27 / 0.06), 0 4px 14px rgb(35 32 27 / 0.05);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --card-pad: var(--space-5);
+  --dashboard-gap: var(--space-5);
   color-scheme: light;
 }
 
@@ -29,6 +38,7 @@
     --danger-soft: #43211e;
     --warning: #e8b755;
     --success: #7fcf97;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px rgb(0 0 0 / 0.22);
     color-scheme: dark;
   }
 }
@@ -83,42 +93,170 @@ a {
   color: var(--ink-soft);
 }
 
-/* Página */
+/* Página e painel */
 
 .page {
-  max-width: 1040px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 32px 16px 24px;
+  padding: var(--space-5) var(--space-6) var(--space-6);
 }
 
-.page-header h1 {
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  margin-bottom: var(--dashboard-gap);
+  padding: var(--space-4) var(--card-pad);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.topbar-title {
+  min-width: 0;
+}
+
+.topbar h1 {
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
-.page-header p {
-  margin-top: 6px;
+.topbar p {
+  margin-top: 2px;
   color: var(--ink-soft);
+  font-size: 0.93rem;
 }
 
-.page-main {
+.stats {
   display: grid;
-  gap: 28px;
-  margin-top: 24px;
+  grid-template-columns: repeat(4, minmax(0, auto));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  min-width: 104px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 10px;
+  background: var(--surface-sunken);
+}
+
+.stat dt {
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.stat dd {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat.is-alert {
+  background: var(--danger-soft);
+}
+
+.stat.is-alert dd {
+  color: var(--danger);
+}
+
+/*
+ * Celular: uma coluna. Tablet: time e fraquezas na largura toda, com times
+ * salvos e sugestões lado a lado. Desktop: coluna principal (time e
+ * fraquezas) e uma coluna lateral (times salvos e sugestões).
+ */
+.dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--dashboard-gap);
+}
+
+/* Fora do desktop as colunas somem e os cards viram itens do grid. */
+.dashboard-main,
+.dashboard-side {
+  display: contents;
+}
+
+@media (min-width: 640px) {
+  .dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .area-team,
+  .area-analysis {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard {
+    grid-template-columns: minmax(0, 1fr) clamp(340px, 28vw, 440px);
+    align-items: start;
+  }
+
+  .dashboard-main,
+  .dashboard-side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dashboard-gap);
+    min-width: 0;
+  }
+}
+
+.card {
+  min-width: 0;
+  padding: var(--card-pad);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  /* Os componentes se adaptam à largura do card, não à da janela. */
+  container-type: inline-size;
+}
+
+/* O container cria um contexto de empilhamento: a lista da busca precisa ficar por cima dos outros cards. */
+.area-team {
+  position: relative;
+  z-index: 2;
+}
+
+/* A busca vira a barra de ferramentas do card do time. */
+.area-team .search {
+  margin: calc(-1 * var(--card-pad)) calc(-1 * var(--card-pad)) var(--space-4);
+  padding: var(--space-4) var(--card-pad) var(--space-1);
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--surface-sunken);
+}
+
+.area-team .search .search-field input {
+  background: var(--surface);
 }
 
 .page-footer {
-  margin-top: 32px;
+  margin-top: var(--space-6);
   color: var(--ink-soft);
   font-size: 0.85rem;
+  text-align: center;
 }
 
 .section-heading {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 .section-heading h2 {
@@ -126,9 +264,60 @@ a {
   letter-spacing: -0.01em;
 }
 
+.card .section-heading {
+  margin: 0 calc(-1 * var(--card-pad)) var(--space-4);
+  padding: 0 var(--card-pad) var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.card .section-heading h2 {
+  font-size: 1.05rem;
+}
+
 .counter {
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
+}
+
+.card .counter {
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --card-pad: var(--space-4);
+    --dashboard-gap: var(--space-4);
+  }
+
+  .page {
+    padding: var(--space-3) var(--space-4) var(--space-5);
+  }
+
+  .stat dd {
+    font-size: 1.15rem;
+  }
 }
 
 /* Busca */
@@ -293,7 +482,7 @@ a {
   margin: -8px;
   border: 2px solid var(--line);
   border-radius: 50%;
-  background: var(--bg);
+  background: var(--surface);
 }
 
 .slot-filled {
@@ -887,17 +1076,20 @@ a {
   height: 160px;
 }
 
-@media (max-width: 860px) {
+/* Slots se ajustam à largura do card do time. */
+@container (max-width: 700px) {
   .slots {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 640px) {
+@container (max-width: 440px) {
   .slots {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
+@media (max-width: 640px) {
   .modal-backdrop {
     place-items: end stretch;
     padding: 24px 0 0;
@@ -932,7 +1124,10 @@ a {
   .details-content {
     padding: 14px 16px 20px;
   }
+}
 
+/* Card estreito: cada linha da tabela vira um bloco. */
+@container (max-width: 520px) {
   .threats thead {
     position: absolute;
     width: 1px;
