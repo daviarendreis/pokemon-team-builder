@@ -6,7 +6,7 @@ import {
   type PokemonType,
 } from '../domain/pokemon';
 import { idFromResourceUrl } from '../domain/sprites';
-import type { TypeRelations } from '../domain/weakness';
+import type { FullTypeRelations } from '../domain/coverage';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 const TIMEOUT_MS = 10_000;
@@ -94,6 +94,9 @@ interface TypeResponse {
     double_damage_from: NamedResource[];
     half_damage_from: NamedResource[];
     no_damage_from: NamedResource[];
+    double_damage_to: NamedResource[];
+    half_damage_to: NamedResource[];
+    no_damage_to: NamedResource[];
   };
 }
 
@@ -128,9 +131,9 @@ function toTypes(resources: NamedResource[]): PokemonType[] {
 }
 
 // As relações de tipo não mudam durante o uso, então cada tipo é buscado uma vez só.
-const typeCache = new Map<PokemonType, Promise<TypeRelations>>();
+const typeCache = new Map<PokemonType, Promise<FullTypeRelations>>();
 
-export function fetchTypeRelations(type: PokemonType): Promise<TypeRelations> {
+export function fetchTypeRelations(type: PokemonType): Promise<FullTypeRelations> {
   const cached = typeCache.get(type);
   if (cached) return cached;
 
@@ -138,6 +141,9 @@ export function fetchTypeRelations(type: PokemonType): Promise<TypeRelations> {
     doubleFrom: toTypes(relations.double_damage_from),
     halfFrom: toTypes(relations.half_damage_from),
     noneFrom: toTypes(relations.no_damage_from),
+    doubleTo: toTypes(relations.double_damage_to),
+    halfTo: toTypes(relations.half_damage_to),
+    noneTo: toTypes(relations.no_damage_to),
   }));
 
   typeCache.set(type, pending);

@@ -120,6 +120,9 @@ describe('fetchTypeRelations', () => {
       double_damage_from: [{ name: 'water' }],
       half_damage_from: [{ name: 'fire' }, { name: 'stellar' }],
       no_damage_from: [],
+      double_damage_to: [{ name: 'grass' }],
+      half_damage_to: [{ name: 'rock' }],
+      no_damage_to: [],
     },
   };
 
@@ -130,7 +133,14 @@ describe('fetchTypeRelations', () => {
     await fetchTypeRelations('fire');
 
     expect(mock).toHaveBeenCalledTimes(1);
-    expect(first).toEqual({ doubleFrom: ['water'], halfFrom: ['fire'], noneFrom: [] });
+    expect(first).toEqual({
+      doubleFrom: ['water'],
+      halfFrom: ['fire'],
+      noneFrom: [],
+      doubleTo: ['grass'],
+      halfTo: ['rock'],
+      noneTo: [],
+    });
   });
 
   it('não guarda falhas em cache', async () => {

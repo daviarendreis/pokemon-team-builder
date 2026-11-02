@@ -134,7 +134,8 @@ a {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, auto));
+  grid-auto-columns: minmax(0, auto);
+  grid-auto-flow: column;
   gap: var(--space-2);
   margin: 0;
 }
@@ -290,7 +291,12 @@ a {
 @media (max-width: 900px) {
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
     width: 100%;
+  }
+
+  .stat:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 
   .topbar {
@@ -301,7 +307,13 @@ a {
 
 @media (min-width: 640px) and (max-width: 900px) {
   .stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+  }
+
+  .stat:last-child:nth-child(odd) {
+    grid-column: auto;
   }
 }
 

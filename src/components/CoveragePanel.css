@@ -1,0 +1,75 @@
+/* Cobertura ofensiva */
+
+/* No tablet o card ocupa a largura toda, como o de fraquezas. */
+@media (min-width: 640px) {
+  .area-coverage {
+    grid-column: 1 / -1;
+  }
+}
+
+.coverage-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 12px;
+}
+
+.coverage-gaps {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.coverage-gap dt {
+  margin-bottom: 4px;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.coverage-gap.is-immune dt,
+.coverage-gap.is-resisted dt {
+  color: var(--danger);
+}
+
+.coverage-gap dd {
+  margin: 0;
+}
+
+.coverage-table .cell-best {
+  width: 96px;
+}
+
+.coverage-multiplier {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.coverage-table tr.is-super .coverage-multiplier {
+  color: var(--success);
+}
+
+.coverage-table tr.is-neutral .coverage-multiplier {
+  color: var(--ink-soft);
+}
+
+.coverage-table tr.is-resisted .coverage-multiplier {
+  color: var(--warning);
+}
+
+.coverage-table tr.is-immune .coverage-multiplier {
+  color: var(--danger);
+}
+
+.coverage-table tr.is-immune,
+.coverage-table tr.is-resisted {
+  background: var(--danger-soft);
+}
+
+.coverage-table .who-list .multiplier {
+  margin-left: 2px;
+}
+
+/* Recolhido, o botão é o único conteúdo da moldura. */
+.threats-wrapper > .threats-toggle:first-child {
+  border-top: 0;
+}
