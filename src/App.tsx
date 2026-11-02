@@ -5,6 +5,7 @@ import { PokemonDetailsModal } from './components/PokemonDetailsModal';
 import { SavedTeams } from './components/SavedTeams';
 import { SearchBar } from './components/SearchBar';
 import { TeamSlots } from './components/TeamSlots';
+import { TeamStatsPanel } from './components/TeamStatsPanel';
 import { TypeSuggestions } from './components/TypeSuggestions';
 import { WeaknessPanel } from './components/WeaknessPanel';
 import { analyzeCoverage } from './domain/coverage';
@@ -79,6 +80,9 @@ export function App() {
               onRemove={remove}
               onOpenDetails={setDetailsOf}
             />
+          </div>
+          <div className="card area-stats">
+            <TeamStatsPanel team={team} />
           </div>
           <div className="card area-analysis">
             <WeaknessPanel team={team} relations={relations} status={status} onRetry={retry} />
