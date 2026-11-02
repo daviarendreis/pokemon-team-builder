@@ -29,7 +29,7 @@ export function isAbort(error: unknown): boolean {
 }
 
 /** Falhas viram `ApiError`; só um cancelamento pedido pelo chamador passa como `AbortError`. */
-async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
+export async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
   const timeout = AbortSignal.timeout(TIMEOUT_MS);
 
   try {

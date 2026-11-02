@@ -1,0 +1,84 @@
+/* Compartilhar e exportar */
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.share-actions > .button-secondary {
+  flex: 1 1 auto;
+}
+
+.button-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-secondary:disabled:hover {
+  background: var(--surface);
+}
+
+.share-hint {
+  margin-top: 8px;
+  font-size: 0.88rem;
+}
+
+.share-panel {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.share-panel .search-label {
+  margin-bottom: 0;
+}
+
+.share-panel .share-hint {
+  margin-top: -4px;
+}
+
+.share-field,
+.share-text {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-sunken);
+  color: var(--ink);
+  font: inherit;
+}
+
+.share-field {
+  height: 46px;
+  font-size: 0.9rem;
+}
+
+.share-text {
+  min-height: 88px;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+form.share-panel .share-text {
+  background: var(--surface);
+}
+
+/* Aviso de link compartilhado, acima do painel. A região existe sempre para o leitor de tela. */
+.share-notice-region > .share-notice {
+  margin-bottom: var(--dashboard-gap);
+  padding: var(--space-3) var(--card-pad);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+@container (max-width: 300px) {
+  .share-actions > .button-secondary {
+    flex-basis: 100%;
+  }
+}
