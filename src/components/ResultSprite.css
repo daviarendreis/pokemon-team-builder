@@ -1,0 +1,20 @@
+/* Sprites nos resultados da busca */
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.suggestions li:has(.suggestion-item) {
+  padding-block: 2px;
+}
+
+.result-sprite {
+  flex: none;
+  object-fit: contain;
+}
+
+.sprite-fallback.result-sprite {
+  font-size: 0.85rem;
+}

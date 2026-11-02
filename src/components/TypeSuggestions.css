@@ -1,0 +1,49 @@
+/* Sugestões de próximo tipo */
+
+.type-suggestions {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.type-suggestion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.type-suggestion-rank {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.type-suggestion:first-child .type-suggestion-rank {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.type-suggestion-body {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.type-suggestion-reason {
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+}
