@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { CoveragePanel } from './components/CoveragePanel';
 import { DashboardStats } from './components/DashboardStats';
 import { PokemonDetailsModal } from './components/PokemonDetailsModal';
 import { SavedTeams } from './components/SavedTeams';
@@ -6,7 +7,8 @@ import { SearchBar } from './components/SearchBar';
 import { TeamSlots } from './components/TeamSlots';
 import { TypeSuggestions } from './components/TypeSuggestions';
 import { WeaknessPanel } from './components/WeaknessPanel';
-import type { Pokemon } from './domain/pokemon';
+import { analyzeCoverage } from './domain/coverage';
+import { POKEMON_TYPES, type Pokemon } from './domain/pokemon';
 import { analyzeTeam } from './domain/weakness';
 import { usePokemonNames } from './hooks/usePokemonNames';
 import { useSavedTeams } from './hooks/useSavedTeams';
@@ -27,6 +29,10 @@ export function App() {
     () => (status === 'ready' && team.length > 0 ? analyzeTeam(team, relations).teamWideWeaknesses : null),
     [status, team, relations],
   );
+  const superEffectiveCount = useMemo(
+    () => (status === 'ready' && team.length > 0 ? analyzeCoverage(team, relations).superEffective.length : null),
+    [status, team, relations],
+  );
 
   return (
     <div className="page">
@@ -43,6 +49,10 @@ export function App() {
               label: 'Fraquezas do time todo',
               value: teamWideWeaknesses ? String(teamWideWeaknesses.length) : '—',
               alert: (teamWideWeaknesses?.length ?? 0) > 0,
+            },
+            {
+              label: 'Tipos com super efetivo',
+              value: superEffectiveCount === null ? '—' : `${superEffectiveCount}/${POKEMON_TYPES.length}`,
             },
             {
               label: 'Times salvos',
@@ -72,6 +82,9 @@ export function App() {
           </div>
           <div className="card area-analysis">
             <WeaknessPanel team={team} relations={relations} status={status} onRetry={retry} />
+          </div>
+          <div className="card area-coverage">
+            <CoveragePanel team={team} relations={relations} status={status} onRetry={retry} />
           </div>
         </div>
         <div className="dashboard-side">

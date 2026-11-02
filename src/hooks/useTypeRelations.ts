@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fetchTypeRelations } from '../api/pokeapi';
 import type { PokemonType } from '../domain/pokemon';
-import type { RelationsByType } from '../domain/weakness';
+import type { FullRelationsByType } from '../domain/coverage';
 
 export type RelationsStatus = 'loading' | 'error' | 'ready';
 
@@ -11,7 +11,7 @@ export type RelationsStatus = 'loading' | 'error' | 'ready';
  * análise não pisca de volta para o estado de carregamento à toa.
  */
 export function useTypeRelations(types: PokemonType[]) {
-  const [relations, setRelations] = useState<RelationsByType>({});
+  const [relations, setRelations] = useState<FullRelationsByType>({});
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
 
